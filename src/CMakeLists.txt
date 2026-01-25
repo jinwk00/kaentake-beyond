@@ -3,8 +3,10 @@ add_library(injector SHARED
     injector.cpp
     system.cpp
     bypass.cpp
+    inlink.cpp
     resman.cpp
     resolution.cpp
+    portablechair.cpp
     debug.cpp
     hook.cpp
 )
