@@ -126,7 +126,9 @@ int WSPAPI WSPStartup_hook(WORD wVersionRequested, LPWSPDATA lpWSPData, LPWSAPRO
 
 
 void AttachSystemHooks() {
-    ATTACH_HOOK(CreateWindowExA_orig, CreateWindowExA_hook);
-    ATTACH_HOOK(RegCreateKeyExA_orig, RegCreateKeyExA_hook);
-    ATTACH_HOOK(WSPStartup_orig, WSPStartup_hook);
+e    //ATTACH_HOOK(CreateWindowExA_orig, CreateWindowExA_hook);
+    //ATTACH_HOOK(RegCreateKeyExA_orig, RegCreateKeyExA_hook);
+    //ATTACH_HOOK(WSPStartup_orig, WSPStartup_hook);
+    AttachResManMod();
+    AttachResolutionMod();
 }

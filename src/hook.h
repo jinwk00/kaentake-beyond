@@ -48,8 +48,8 @@ void AttachResManMod();
 void AttachResolutionMod();
 
 inline void AttachClientHooks() {
-    AttachResManMod();
-    AttachResolutionMod();
+    /*AttachResManMod();*/
+    /*AttachResolutionMod();*/
 }
 
 
