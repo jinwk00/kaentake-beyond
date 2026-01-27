@@ -20,9 +20,31 @@ class CUser {
 public:
     MEMBER_AT(IWzVector2DPtr, 0x1140, m_pBodyOrigin) // CAvatar->m_pBodyOrigin
     MEMBER_AT(int, 0x2AE0, m_bAdminHide)             // CAvatar->m_bAdminHide
-    MEMBER_HOOK(void, 0x0093C7C3, SetActivePortableChair, int nItemID)
+    MEMBER_HOOK(void, 0x0092DCFC, Constructor, int dwCharacterId)
     MEMBER_HOOK(void, 0x00930B27, Update)
+    MEMBER_HOOK(void, 0x0093C7C3, SetActivePortableChair, int nItemID)
 };
+
+void CUser::Constructor_hook(int dwCharacterId) {
+    CUser::Constructor(this, dwCharacterId);
+    m_bAdminHide = 0;
+}
+
+void CUser::Update_hook() {
+    CUser::Update(this);
+    int packed = m_bAdminHide;
+    if (packed) {
+        int x = (packed >> 16) & 0xFFFF;
+        if (x & 0x8000) {
+            x |= 0xFFFF0000;
+        }
+        int y = (packed & 0xFFFF);
+        if (y & 0x8000) {
+            y |= 0xFFFF0000;
+        }
+        m_pBodyOrigin->RelMove(x, y);
+    }
+}
 
 void CUser::SetActivePortableChair_hook(int nItemID) {
     CUser::SetActivePortableChair(this, nItemID);
@@ -47,22 +69,6 @@ void CUser::SetActivePortableChair_hook(int nItemID) {
     m_bAdminHide = packed;
 }
 
-void CUser::Update_hook() {
-    CUser::Update(this);
-    int packed = m_bAdminHide;
-    if (packed) {
-        int x = (packed >> 16) & 0xFFFF;
-        if (x & 0x8000) {
-            x |= 0xFFFF0000;
-        }
-        int y = (packed & 0xFFFF);
-        if (y & 0x8000) {
-            y |= 0xFFFF0000;
-        }
-        m_pBodyOrigin->RelMove(x, y);
-    }
-}
-
 
 static auto CUserLocal__IsAdminHide = reinterpret_cast<void(__thiscall*)(void*)>(0x00949130);
 int __fastcall CUserLocal__IsAdminHide_hook(void* pThis, void* _EDX) {
@@ -80,8 +86,9 @@ void __declspec(naked) CField__OnAdminResult_hook() {
 
 void AttachPortableChairMod() {
     // Handle bodyRelMove
-    ATTACH_HOOK(CUser::SetActivePortableChair, CUser::SetActivePortableChair_hook);
+    ATTACH_HOOK(CUser::Constructor, CUser::Constructor_hook);
     ATTACH_HOOK(CUser::Update, CUser::Update_hook);
+    ATTACH_HOOK(CUser::SetActivePortableChair, CUser::SetActivePortableChair_hook);
 
     // Restore bIsAdminHide
     ATTACH_HOOK(CUserLocal__IsAdminHide, CUserLocal__IsAdminHide_hook);
