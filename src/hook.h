@@ -43,13 +43,11 @@
 // called in injector.cpp -> DllMain
 void AttachSystemHooks();
 
-// called in system.cpp -> CreateMutexA_hook
-void AttachClientBypass();
+// called in mod.cpp -> Module_OnLogoEnd
 void AttachResManMod();
 void AttachResolutionMod();
 
 inline void AttachClientHooks() {
-    AttachClientBypass();
     AttachResManMod();
     AttachResolutionMod();
 }

@@ -2,7 +2,7 @@
 add_library(injector SHARED
     injector.cpp
     system.cpp
-    bypass.cpp
+    mod.cpp
     resman.cpp
     resolution.cpp
     debug.cpp
