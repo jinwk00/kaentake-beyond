@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "hook.h"
-#include "mod.h"
 #include "ztl/ztl.h"
 #include <windows.h>
 
@@ -16,7 +15,6 @@ BOOL WINAPI DllMain(HINSTANCE hModule, DWORD fdwReason, LPVOID lpvReserved) {
     switch (fdwReason) {
     case DLL_PROCESS_ATTACH:
         DisableThreadLibraryCalls(hModule);
-        Module_OnDllAttach();
         AttachSystemHooks();
         break;
     case DLL_PROCESS_DETACH:
