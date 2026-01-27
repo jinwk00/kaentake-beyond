@@ -10,7 +10,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ZeroMemory(&pi, sizeof(pi));
     si.cb = sizeof(STARTUPINFOA);
 
-    const char* sApplicationName = lpCmdLine && *lpCmdLine ? lpCmdLine : "MapleStory.exe";
+    const char* sApplicationName = lpCmdLine && *lpCmdLine ? lpCmdLine : "BeyondMS.exe";
     if (!DetourCreateProcessWithDllExA(sApplicationName, lpCmdLine, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi, "mod.dll", NULL)) {
         DWORD dwError = GetLastError();
         LPSTR sErrorMessage = nullptr;
