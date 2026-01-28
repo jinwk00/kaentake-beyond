@@ -43,9 +43,11 @@
 // called in injector.cpp -> DllMain
 void AttachSystemHooks();
 
-// called in mod.cpp -> Module_OnLogoEnd
+// called in system.cpp -> CreateMutexA_hook
+void AttachClientInlink();
 void AttachResManMod();
 void AttachResolutionMod();
+void AttachPortableChairMod();
 
 inline void AttachClientHooks() {
     /*AttachResManMod();*/
