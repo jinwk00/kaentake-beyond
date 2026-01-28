@@ -8,9 +8,9 @@
 
 namespace {
 constexpr int kBaseScreenWidth = 800;
-constexpr int kBossHpTooltipBaseY = 37;
-constexpr int kBossHpTooltipXOffset = 0;
-constexpr int kBossHpTooltipYOffset = 10;
+constexpr int kBossHpTooltipBaseY = 10;
+constexpr int kBossHpTooltipXOffset = -230;
+constexpr int kBossHpTooltipYOffset = 28;
 constexpr DWORD kCUIMiniMapInstance = 0x00BED788;
 constexpr DWORD kCFieldShowMobHpTag = 0x005336CA;
 constexpr DWORD kCFieldInit = 0x00528DBC;
