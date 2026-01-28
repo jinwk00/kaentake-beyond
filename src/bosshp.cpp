@@ -2,10 +2,14 @@
 
 #include "bosshp.h"
 #include "hook.h"
+#include "wvs/util.h"
 
 #include <cstdio>
 
 namespace {
+constexpr int kBaseScreenWidth = 800;
+constexpr int kBossHpTooltipBaseY = 37;
+constexpr int kBossHpTopOffset = 16;
 constexpr DWORD kCUIMiniMapInstance = 0x00BED788;
 constexpr DWORD kCFieldShowMobHpTag = 0x005336CA;
 constexpr DWORD kCFieldInit = 0x00528DBC;
@@ -31,6 +35,14 @@ int ReadInt(DWORD dwAddress) {
 
 int GetMiniMapWidth() {
     return ReadInt(ReadInt(kCUIMiniMapInstance) + 0x24);
+}
+
+int GetBossHpTooltipX() {
+    return ((get_screen_width() - kBaseScreenWidth) / 2) + GetMiniMapWidth();
+}
+
+int GetBossHpTooltipY() {
+    return kBossHpTooltipBaseY + GetBossHpTopOffset();
 }
 
 using UIToolTipSetToolTipString = void(__fastcall*)(void* pThis, void* edx, int x, int y, const char* sToolTip);
@@ -68,7 +80,7 @@ void DrawBossHpNumberIfNeeded() {
 
     char sToolTip[20] = {};
     std::snprintf(sToolTip, sizeof(sToolTip), "%.2f%%", g_boss_hp_percentage);
-    SetToolTipString(&g_boss_hp_tooltip, GetMiniMapWidth(), 37, sToolTip);
+    SetToolTipString(&g_boss_hp_tooltip, GetBossHpTooltipX(), GetBossHpTooltipY(), sToolTip);
 }
 
 void DrawBossHpNumber(int nHP, int nMaxHP) {
@@ -115,6 +127,10 @@ void __fastcall CFieldDispose_hook(void* pThis, void* _EDX) {
     s_cfield_dispose(pThis);
 }
 } // namespace
+
+int GetBossHpTopOffset() {
+    return kBossHpTopOffset;
+}
 
 void AttachBossHpMod() {
     ATTACH_HOOK(s_cuserlocal_update, CUserLocalUpdate_hook);
