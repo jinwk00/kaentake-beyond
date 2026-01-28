@@ -6,7 +6,6 @@
 #include "wvs/field.h"
 #include "wvs/rtti.h"
 #include "wvs/util.h"
-#include "bosshp.h"
 #include "ztl/ztl.h"
 
 #include <windows.h>
@@ -249,7 +248,6 @@ class CWndMan : public CWnd, public TSingleton<CWndMan, 0x00BEC20C> {
 public:
     inline static ZList<CWnd*>& ms_lpWindow = *reinterpret_cast<ZList<CWnd*>*>(0x00BF1648);
     inline static IWzVector2DPtr ms_pOrgWindowEx[9];
-    inline static IWzVector2DPtr g_pBossHpOrgWindow;
 
     MEMBER_AT(IWzVector2DPtr, 0xDC, m_pOrgWindow)
     MEMBER_HOOK(void, 0x009E2C42, Constructor, HWND hWnd)
@@ -279,13 +277,6 @@ public:
             ms_pOrgWindowEx[i]->origin = static_cast<IUnknown*>(get_gr()->center);
             ms_pOrgWindowEx[i]->RelMove(nX, nY);
         }
-        if (g_pBossHpOrgWindow) {
-            int nX = -(get_screen_width() / 2);
-            nX += (get_screen_width() - 800) / 2;
-            int nY = -(get_screen_height() / 2) + GetBossHpTopOffset();
-            g_pBossHpOrgWindow->origin = static_cast<IUnknown*>(get_gr()->center);
-            g_pBossHpOrgWindow->RelMove(nX, nY);
-        }
     }
 };
 
@@ -294,7 +285,6 @@ void CWndMan::Constructor_hook(HWND hWnd) {
     for (int i = 0; i < CWnd::UIOrigin::Origin_NUM; ++i) {
         PcCreateObject<IWzVector2DPtr>(L"Shape2D#Vector2D", ms_pOrgWindowEx[i], nullptr);
     }
-    PcCreateObject<IWzVector2DPtr>(L"Shape2D#Vector2D", g_pBossHpOrgWindow, nullptr);
     ResetOrgWindow();
 }
 
@@ -303,7 +293,6 @@ void CWndMan::Destructor_hook() {
     for (int i = 0; i < CWnd::UIOrigin::Origin_NUM; ++i) {
         ms_pOrgWindowEx[i] = nullptr;
     }
-    g_pBossHpOrgWindow = nullptr;
 }
 
 
@@ -311,10 +300,6 @@ IWzVector2DPtr* CWndMan::GetOrgWindow_hook(IWzVector2DPtr* result) {
     auto ret = reinterpret_cast<uintptr_t>(_ReturnAddress());
     switch (ret) {
     case 0x00533B77: // CField::ShowMobHPTag
-        if (g_pBossHpOrgWindow) {
-            result->GetInterfacePtr() = g_pBossHpOrgWindow;
-            break;
-        }
     case 0x005555B7: // CField_Dojang::OnClock
     case 0x0058C91C: // CFloatNotice::CreateFloatNotice
     case 0x006CD787: // CNoticeQuestProgress::CNoticeQuestProgress

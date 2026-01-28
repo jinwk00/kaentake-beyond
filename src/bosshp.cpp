@@ -8,8 +8,8 @@
 
 namespace {
 constexpr int kBaseScreenWidth = 800;
-constexpr int kBossHpTooltipBaseY = 44;
-constexpr int kBossHpTopOffset = 6;
+constexpr int kBossHpTooltipBaseY = 37;
+constexpr int kBossHpTooltipYOffset = 10;
 constexpr DWORD kCUIMiniMapInstance = 0x00BED788;
 constexpr DWORD kCFieldShowMobHpTag = 0x005336CA;
 constexpr DWORD kCFieldInit = 0x00528DBC;
@@ -42,7 +42,7 @@ int GetBossHpTooltipX() {
 }
 
 int GetBossHpTooltipY() {
-    return kBossHpTooltipBaseY + GetBossHpTopOffset();
+    return kBossHpTooltipBaseY + kBossHpTooltipYOffset;
 }
 
 using UIToolTipSetToolTipString = void(__fastcall*)(void* pThis, void* edx, int x, int y, const char* sToolTip);
@@ -127,10 +127,6 @@ void __fastcall CFieldDispose_hook(void* pThis, void* _EDX) {
     s_cfield_dispose(pThis);
 }
 } // namespace
-
-int GetBossHpTopOffset() {
-    return kBossHpTopOffset;
-}
 
 void AttachBossHpMod() {
     ATTACH_HOOK(s_cuserlocal_update, CUserLocalUpdate_hook);
