@@ -9,6 +9,7 @@
 namespace {
 constexpr int kBaseScreenWidth = 800;
 constexpr int kBossHpTooltipBaseY = 37;
+constexpr int kBossHpTooltipXOffset = 0;
 constexpr int kBossHpTooltipYOffset = 10;
 constexpr DWORD kCUIMiniMapInstance = 0x00BED788;
 constexpr DWORD kCFieldShowMobHpTag = 0x005336CA;
@@ -38,7 +39,7 @@ int GetMiniMapWidth() {
 }
 
 int GetBossHpTooltipX() {
-    return ((get_screen_width() - kBaseScreenWidth) / 2) + GetMiniMapWidth();
+    return ((get_screen_width() - kBaseScreenWidth) / 2) + GetMiniMapWidth() + kBossHpTooltipXOffset;
 }
 
 int GetBossHpTooltipY() {
