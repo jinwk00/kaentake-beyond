@@ -1,6 +1,9 @@
 # Build injector
 add_library(injector SHARED
+    client.cpp
+    client_patches.cpp
     injector.cpp
+    macaddress.cpp
     system.cpp
     inlink.cpp
     mod.cpp

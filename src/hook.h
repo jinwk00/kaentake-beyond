@@ -48,10 +48,15 @@ void AttachClientInlink();
 void AttachResManMod();
 void AttachResolutionMod();
 void AttachPortableChairMod();
+void ApplyClientPatches();
+
+namespace MacAddress_Hook {
+    void Attach();
+}
 
 inline void AttachClientHooks() {
-    /*AttachResManMod();*/
-    /*AttachResolutionMod();*/
+    ApplyClientPatches();
+    MacAddress_Hook::Attach();
 }
 
 
