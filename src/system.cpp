@@ -133,4 +133,5 @@ void AttachSystemHooks() {
     AttachResManMod();
     AttachResolutionMod();
     AttachPortableChairMod();
+    AttachBossHpMod();
 }
