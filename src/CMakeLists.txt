@@ -10,6 +10,7 @@ add_library(injector SHARED
     resman.cpp
     resolution.cpp
     portablechair.cpp
+    bosshp.cpp
     debug.cpp
     hook.cpp
 )

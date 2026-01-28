@@ -1,4 +1,5 @@
 #pragma once
+#include "bosshp.h"
 #include "debug.h"
 #include <type_traits>
 
