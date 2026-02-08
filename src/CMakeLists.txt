@@ -1,10 +1,16 @@
 # Build injector
 add_library(injector SHARED
+    client.cpp
+    client_patches.cpp
     injector.cpp
+    macaddress.cpp
     system.cpp
-    bypass.cpp
+    inlink.cpp
+    mod.cpp
     resman.cpp
     resolution.cpp
+    portablechair.cpp
+    bosshp.cpp
     debug.cpp
     hook.cpp
 )

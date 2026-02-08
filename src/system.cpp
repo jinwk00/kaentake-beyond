@@ -10,22 +10,6 @@
 #pragma comment(lib, "ws2_32.lib")
 
 
-typedef decltype(&CreateMutexA) CreateMutexA_t;
-static CreateMutexA_t CreateMutexA_orig = reinterpret_cast<CreateMutexA_t>(GetAddress("KERNEL32", "CreateMutexA"));
-
-HANDLE WINAPI CreateMutexA_hook(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCSTR lpName) {
-    DEBUG_MESSAGE("CreateMutexA : %s", lpName);
-    if (lpName && !strcmp(lpName, "WvsClientMtx")) {
-        char sMutex[1024];
-        sprintf_s(sMutex, 1024, "%s-%d", lpName, GetCurrentProcessId());
-        lpName = sMutex;
-        AttachClientHooks();
-        return CreateMutexA_orig(lpMutexAttributes, bInitialOwner, sMutex);
-    }
-    return CreateMutexA_orig(lpMutexAttributes, bInitialOwner, lpName);
-}
-
-
 typedef decltype(&CreateWindowExA) CreateWindowExA_t;
 static CreateWindowExA_t CreateWindowExA_orig = reinterpret_cast<CreateWindowExA_t>(GetAddress("USER32", "CreateWindowExA"));
 static WNDPROC g_WndProc;
@@ -142,8 +126,12 @@ int WSPAPI WSPStartup_hook(WORD wVersionRequested, LPWSPDATA lpWSPData, LPWSAPRO
 
 
 void AttachSystemHooks() {
-    ATTACH_HOOK(CreateMutexA_orig, CreateMutexA_hook);
-    ATTACH_HOOK(CreateWindowExA_orig, CreateWindowExA_hook);
-    ATTACH_HOOK(RegCreateKeyExA_orig, RegCreateKeyExA_hook);
-    ATTACH_HOOK(WSPStartup_orig, WSPStartup_hook);
+    //ATTACH_HOOK(CreateWindowExA_orig, CreateWindowExA_hook);
+    //ATTACH_HOOK(RegCreateKeyExA_orig, RegCreateKeyExA_hook);
+    //ATTACH_HOOK(WSPStartup_orig, WSPStartup_hook);
+    AttachClientInlink();
+    AttachResManMod();
+    AttachResolutionMod();
+    AttachPortableChairMod();
+    AttachBossHpMod();
 }

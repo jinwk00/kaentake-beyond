@@ -1,4 +1,5 @@
 #pragma once
+#include "bosshp.h"
 #include "debug.h"
 #include <type_traits>
 
@@ -44,14 +45,19 @@
 void AttachSystemHooks();
 
 // called in system.cpp -> CreateMutexA_hook
-void AttachClientBypass();
+void AttachClientInlink();
 void AttachResManMod();
 void AttachResolutionMod();
+void AttachPortableChairMod();
+void ApplyClientPatches();
+
+namespace MacAddress_Hook {
+    void Attach();
+}
 
 inline void AttachClientHooks() {
-    AttachClientBypass();
-    AttachResManMod();
-    AttachResolutionMod();
+    ApplyClientPatches();
+    MacAddress_Hook::Attach();
 }
 
 
